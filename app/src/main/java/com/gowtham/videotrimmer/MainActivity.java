@@ -1,5 +1,7 @@
 package com.gowtham.videotrimmer;
 
+import static androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -20,18 +22,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.ui.PlayerView;
 
 import com.cocosw.bottomsheet.BottomSheet;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.audio.AudioAttributes;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.gowtham.library.utils.CompressOption;
 import com.gowtham.library.utils.LogMessage;
 import com.gowtham.library.utils.TrimType;
@@ -39,10 +41,11 @@ import com.gowtham.library.utils.TrimVideo;
 
 import java.io.File;
 
+@UnstableApi
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
-    private StyledPlayerView playerView;
+    private PlayerView playerView;
     private ExoPlayer videoPlayer;
     private EditText edtFixedGap, edtMinGap, edtMinFrom, edtMAxTo;
     private int trimType;
@@ -112,11 +115,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initPlayer() {
         try {
             videoPlayer = new ExoPlayer.Builder(this).build();
-            playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+            playerView.setResizeMode(RESIZE_MODE_FIT);
             playerView.setPlayer(videoPlayer);
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(C.USAGE_MEDIA)
-                    .setContentType(C.CONTENT_TYPE_MOVIE)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
                     .build();
             videoPlayer.setAudioAttributes(audioAttributes, true);
         } catch (Exception e) {

@@ -1,5 +1,7 @@
 package com.gowtham.library.ui;
 
+import static androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,27 +29,28 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.ui.PlayerView;
 
 import com.akexorcist.localizationactivity.ui.LocalizationActivity;
-import com.arthenica.ffmpegkit.FFmpegKit;
+import com.antonkarpenko.ffmpegkit.FFmpegKit;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.audio.AudioAttributes;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.gson.Gson;
 import com.gowtham.library.R;
 import com.gowtham.library.ui.seekbar.widgets.CrystalRangeSeekbar;
@@ -74,7 +77,7 @@ import java.util.concurrent.Executors;
 public class ActVideoTrimmer extends LocalizationActivity {
 
     private static final int PER_REQ_CODE = 115;
-    private StyledPlayerView playerView;
+    private PlayerView playerView;
     private ExoPlayer videoPlayer;
 
     private ImageView imagePlayPause;
@@ -195,23 +198,38 @@ public class ActVideoTrimmer extends LocalizationActivity {
     /**
      * SettingUp exoplayer
      **/
+    @OptIn(markerClass = UnstableApi.class)
     private void initPlayer() {
+        if (videoPlayer != null) {
+            Log.w("ExoPlayer", "Player already initialized, skipping.");
+            return;
+        }
+
         try {
             videoPlayer = new ExoPlayer.Builder(this).build();
-            playerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
-            playerView.setPlayer(videoPlayer);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                        .setUsage(C.USAGE_MEDIA)
-                        .setContentType(C.CONTENT_TYPE_MOVIE)
-                        .build();
-                videoPlayer.setAudioAttributes(audioAttributes, true);
+
+            if (playerView != null) {
+                playerView.setResizeMode(RESIZE_MODE_FIT);
+                playerView.setPlayer(videoPlayer);
+            } else {
+                Log.w("ExoPlayer", "PlayerView is null. ExoPlayer not bound to UI.");
             }
+
+            // AudioAttributes always available ≥ Lollipop
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                    .build();
+            videoPlayer.setAudioAttributes(audioAttributes, /* handleAudioFocus= */ true);
+
+        } catch (IllegalStateException ise) {
+            Log.e("ExoPlayer", "Illegal state during init", ise);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("ExoPlayer", "Unexpected error initializing ExoPlayer", e);
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     private void setDataInView() {
         try {
             Runnable fileUriRunnable = () -> {
@@ -285,6 +303,7 @@ public class ActVideoTrimmer extends LocalizationActivity {
             videoPlayer.seekTo(sec * 1000);
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     private void buildMediaSource() {
         try {
             DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this);
