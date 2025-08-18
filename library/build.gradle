@@ -16,7 +16,7 @@ android {
         compileSdk = 34
         consumerProguardFiles "consumer-rules.pro"
 
-        ndkVersion '22.1.7171670'
+        ndkVersion '28.2.13676358'
     }
 
     sourceSets {
@@ -44,7 +44,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
-    implementation 'com.github.ZENSH1:ffmpeg-kit:v6.1'
+    implementation 'com.antonkarpenko:ffmpeg-kit-full-gpl:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
     implementation 'com.akexorcist:localization:1.2.9'
