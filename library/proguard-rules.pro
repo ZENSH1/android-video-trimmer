@@ -19,11 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class com.arthenica.mobileffmpeg.* { *; }
--keep class com.arthenica.mobileffmpeg.Config {
-    native <methods>;
+# Keep all classes within the com.antonkarpenko package.
+# Also, keep all members (fields and methods) of these classes.
+# Additionally, specifically ensure all native methods within these classes are preserved.
+-keep class com.antonkarpenko.* {
+    *; # Keep all fields and methods
+    native <methods>; # Explicitly keep all native methods
 }
 
--keep class com.arthenica.mobileffmpeg.AbiDetect {
-    native <methods>;
-}
+# The rules below are now redundant if the above rule is used.
+# You can remove them:
+# -keepclassmembers class com.antonkarpenko.Config {
+# native <methods>;
+# }
+#
+# -keepclassmembers class com.antonkarpenko.AbiDetect {
+# native <methods>;
+# }
