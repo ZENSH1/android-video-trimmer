@@ -1,5 +1,5 @@
 [![](https://jitpack.io/v/jZAIKO/android-video-trimmer.svg)](https://jitpack.io/#jZAIKO/android-video-trimmer)
-[![](https://jitpack.io/v/a914-gowtham/android-video-trimmer.svg)](https://jitpack.io/#a914-gowtham/android-video-trimmer)
+[![](https://jitpack.io/v/#ZENSH1/android-video-trimmer.svg)](https://jitpack.io/#ZENSH1/android-video-trimmer)
 
 
 # Android-video-trimmer
