@@ -22,7 +22,7 @@
 # Keep all classes within the com.antonkarpenko package.
 # Also, keep all members (fields and methods) of these classes.
 # Additionally, specifically ensure all native methods within these classes are preserved.
--keep class com.antonkarpenko.* {
+-keep class com.arthenica.* {
     *; # Keep all fields and methods
     native <methods>; # Explicitly keep all native methods
 }

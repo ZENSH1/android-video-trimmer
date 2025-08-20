@@ -47,7 +47,7 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 import androidx.media3.ui.PlayerView;
 
 import com.akexorcist.localizationactivity.ui.LocalizationActivity;
-import com.antonkarpenko.ffmpegkit.FFmpegKit;
+import com.arthenica.ffmpegkit.FFmpegKit;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
