@@ -18,7 +18,7 @@
  ```gradle
  // replace x.y.z with latest available jitpack version
  dependencies {
-    implementation 'com.github.a914-gowtham:android-video-trimmer:x.y.z'
+    implementation 'com.github.ZENSH1:android-video-trimmer:3.0.3'
  }
  ```
  + Add to project's root `build.gradle` file:
